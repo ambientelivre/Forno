@@ -92,8 +92,7 @@ class InputBuilder {
         //echo "Classe: " . $class;
         if (!empty($data) && $class != "") {
             $classname = $class.".php";
-            $dir = dirname(__FILE__)."/layouts/".$classname; // Diretório padrão dos temas
-            
+            $dir = basename(__DIR__)."/layouts/".$classname; // Diretório padrão dos temas
             if (!file_exists($dir)) {
                 // Se não localizar os temas no diretório padrão,
                 // Pode ser definido um diretório 'alternativo'...
@@ -136,7 +135,7 @@ class InputBuilder {
             } 
         }
         
-        $content .= "<tr class='item'>";    
+        $content .= "<tr class='row_item'>";    
         
         for ($i = 0; $i < count($input['inputs']); $i++) {
             if (!empty($input['inputs'][$i]['type']) && $input['inputs'][$i]['type'] != 'hidden') {

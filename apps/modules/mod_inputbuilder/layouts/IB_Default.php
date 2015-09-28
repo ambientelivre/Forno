@@ -43,16 +43,17 @@ class IB_Default extends Shared {
     }
     
     protected function getTemplateContent($input) {
-        if (!empty($input['label'])) {
-            $content = '<div class="" id="custom_'.$input['name'].'">';  
-        }
+        $content = '<div class="" id="custom_'.$input['id'].'">';  
 
 	if (!empty($input['pre_content'])) {
             $content.= $input['pre_content'];
         }
       
         $content.= parent::openInputTag($input); // Abre    
-        $content.= ' class="'.$input['class'].'"';
+        
+        if (!empty($input['class'])) {
+            $content .= ' class="'.$input['class'].'"';
+        }       
         if (!empty($input['id'])) {
             $content .= ' id="'.$input['id'].'"';
         }           
@@ -66,23 +67,30 @@ class IB_Default extends Shared {
             $content .= ' data-'.$input['data_name'].'="'.$input['data'].'"';
         }        
         $content .= ' '.$input['extra_param'];
-        $content .= ' >'; 
-        if ($input['type'] == "select") {
-            $default_option = array("", "Selecione uma opção");
+        $content .= ' >';    
+        if ($input['type'] == "select" || $input['type'] == "datalist" || $input['type'] == "radiogroup") {
+	    if ($input['type'] == "datalist") {
+		$content .= '<datalist id="'.$input['datalist_id'].'">';
+	    }
+            if (!empty($input['placeholder'])) {
+                $default_option = array("", $input['placeholder']);
+            }
             $content.= parent::buildSelect($input, $default_option);
         }
         
-        $content.= parent::closeInputTag($input);   
-
-        /*
-        if (!empty($input['label'])) {
-            $content .= "</div>";
+        if (!empty($input['inside_post_content'])) {
+            $content.= $input['inside_post_content'];
         }
-	*/
         
-	if (!empty($input['post_content'])) {
-            $content.= $input['post_content'];
+        $content.= parent::closeInputTag($input);
+
+	if (!empty($input['outside_post_content'])) {
+            $content.= $input['outside_post_content'];
         }
+
+	$content .= "</div>";
+
         return $content;
     }
 }
+

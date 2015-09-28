@@ -29,9 +29,9 @@ class IB_ChronoForms5 extends Shared {
                 $content .= ' for="'.$input['label_for'].'"';
             }
             if ($input['type'] == "hidden") {
-                $content .= 'style="visibility: hidden;"';
+                $content .= ' style="visibility: hidden;"';
             }
-            $content .= 'class="control-label gcore-label-left">'.$input['label'].'</label>';
+            $content .= ' class="control-label gcore-label-left">'.$input['label'].'</label>';
             return $content;
         } else {
             return "";
@@ -40,14 +40,15 @@ class IB_ChronoForms5 extends Shared {
     
     protected function getTemplateContent($input) {
         if (!empty($input['label'])) {
-            $content = '<div class="gcore-input gcore-display-table" id="custom_'.$input['name'].'">';        
+            $content = '<div class="gcore-input gcore-display-table" id="custom_'.$input['id'].'">';        
         }
         
 	if (!empty($input['pre_content'])) {
             $content.= $input['pre_content'];
         }
 
-        $content.= parent::openInputTag($input); // Abre   
+        $content.= parent::openInputTag($input); // Abre    
+        
         $content.= ' class="form-control A '.$input['class'].'"';
         if (!empty($input['id'])) {
             $content .= ' id="'.$input['id'].'"';
@@ -63,7 +64,10 @@ class IB_ChronoForms5 extends Shared {
         }        
         $content .= ' '.$input['extra_param'];
         $content .= ' >';   
-        if ($input['type'] == "select") {
+        if ($input['type'] == "select" || $input['type'] == "datalist" || $input['type'] == "radiogroup") {
+	    if ($input['type'] == "datalist") {
+		$content .= '<datalist id="'.$input['datalist_id'].'">';
+	    }
             if (!empty($input['placeholder'])) {
                 $default_option = array("", $input['placeholder']);
             }
@@ -76,10 +80,14 @@ class IB_ChronoForms5 extends Shared {
         }
 	*/
 
+        if (!empty($input['inside_post_content'])) {
+            $content.= $input['inside_post_content'];
+        }
+        
         $content.= parent::closeInputTag($input);
 
-	if (!empty($input['post_content'])) {
-            $content.= $input['post_content'];
+	if (!empty($input['outside_post_content'])) {
+            $content.= $input['outside_post_content'];
         }
    
         return $content;
